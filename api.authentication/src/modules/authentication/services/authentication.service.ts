@@ -1,87 +1,86 @@
-import { Inject, Injectable, CACHE_MANAGER, HttpStatus } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-import { RegisterUserDto, LoginDto } from '@modules/authentication/dtos';
-import { User } from '@modules/authentication/models/user.model';
-import { BcryptHash } from '@shared/bcrypt-hash.shared';
-import { USER_REPOSITORY } from '@constants/index';
-import { AppError } from '@errors/app.error';
+import {
+  JWT_EXPIRES_IN_REFRESH_TOKEN,
+  JWT_SECRET_REFRESH_TOKEN,
+  USER_TOKEN_REPOSITORY,
+} from '@shared/constants';
+import {
+  IPayloadInterface,
+  ITokenResponse,
+} from '@modules/authentication/interfaces';
+import { User } from '@modules/user/models/user.model';
+import { UserToken } from '@modules/user/models/user-token.model';
+import { DateFormat } from '@shared/utils/date-format.shared';
 
 @Injectable()
 export class AuthenticationService {
-  private readonly twentyFourHours = parseInt(process.env.TTL_TIME) ?? 86460;
-  private readonly cachePrefix = 'auth';
-
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-
-    @Inject(USER_REPOSITORY) private readonly userRepository: typeof User,
+    @Inject(USER_TOKEN_REPOSITORY)
+    private readonly userTokenRepository: typeof UserToken,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async create({ email, name, password }: RegisterUserDto) {
-    const user = await this.userRepository.findOne({
-      where: {
-        email,
-      },
-    });
+  async signIn(user: User): Promise<ITokenResponse> {
+    const accessToken = await this.generateAccessToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
 
-    if (user) {
-      throw new AppError(
-        HttpStatus.CONFLICT,
-        'Already exists a user with this email!',
-      );
-    }
+    await this.saveToken(user.id, refreshToken);
 
-    const key = this.getKey(email);
-
-    password = await BcryptHash.hashPassword(password);
-
-    await this.userRepository.create({
-      email,
-      name,
-      password,
-    });
-
-    await this.cacheManager.set(key, { user }, this.twentyFourHours);
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
-  async login({ email, password }: LoginDto) {
-    const key = this.getKey(email);
+  async verifyToken(token: string): Promise<boolean> {
+    try {
+      await this.jwtService.verifyAsync(token);
 
-    const cachedUser = await this.cacheManager.get(key);
-
-    if (cachedUser) {
       return true;
+    } catch (err) {
+      return false;
     }
+  }
 
-    const user = await this.userRepository.findOne({
-      where: {
-        email,
-      },
+  async decodeToken(token: string): Promise<User> {
+    return this.jwtService.decode(token) as User;
+  }
+
+  private async saveToken(userId: number, refreshToken: string) {
+    await this.userTokenRepository.destroy({ where: { userId } });
+
+    await this.userTokenRepository.create({
+      userId,
+      refreshToken,
+      expiresDate: DateFormat.addDays(
+        new Date(),
+        parseInt(JWT_EXPIRES_IN_REFRESH_TOKEN),
+      ),
     });
-
-    const isSamePassword = await BcryptHash.verifyPassword(
-      password,
-      user.password,
-    );
-
-    if (!user || !isSamePassword) {
-      throw new AppError(HttpStatus.UNAUTHORIZED);
-    }
-
-    await this.cacheManager.set(key, { user }, this.twentyFourHours);
-
-    return true;
   }
 
-  async delete({ email, password }: LoginDto) {
-    const key = this.getKey(email);
+  private async generateAccessToken(user: User): Promise<string> {
+    const payload: IPayloadInterface = {
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+    };
 
-    await this.cacheManager.del(key);
-    // to do
+    return this.jwtService.signAsync(payload);
   }
 
-  private getKey(email: string): string {
-    return `${this.cachePrefix}-${email}`;
+  private async generateRefreshToken(user: User): Promise<string> {
+    const payload: IPayloadInterface = {
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    return this.jwtService.signAsync(payload, {
+      expiresIn: JWT_EXPIRES_IN_REFRESH_TOKEN,
+      secret: JWT_SECRET_REFRESH_TOKEN,
+    });
   }
 }

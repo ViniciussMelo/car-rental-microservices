@@ -1,9 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
+import { ErrorInterceptor } from '@shared/interceptors/error.interceptor';
+import { APP_INTERCEPTOR } from '@shared/constants/index';
 import { ModulesModule } from '@modules/modules.module';
-import { APP_INTERCEPTOR } from '@constants/index';
-import { ErrorInterceptor } from '@interceptors/error.interceptor';
 
 const interceptorProvider = {
   provide: APP_INTERCEPTOR,

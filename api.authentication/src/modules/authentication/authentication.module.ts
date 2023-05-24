@@ -1,18 +1,29 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 
-import { AuthenticationController } from '@modules/authentication/controllers/authentication.controller';
+import {
+  JWT_EXPIRES_IN_TOKEN,
+  JWT_SECRET_TOKEN,
+  USER_TOKEN_REPOSITORY,
+} from '@shared/constants/index';
 import { AuthenticationService } from '@modules/authentication/services/authentication.service';
-import { User } from '@modules/authentication/models/user.model';
-import { USER_REPOSITORY } from '@constants/index';
+import { UserToken } from '@modules/user/models/user-token.model';
 
-export const usersProviders = {
-  provide: USER_REPOSITORY,
-  useValue: User,
+export const usersTokenProvider = {
+  provide: USER_TOKEN_REPOSITORY,
+  useValue: UserToken,
 };
 
+@Global()
 @Module({
-  controllers: [AuthenticationController],
-  providers: [AuthenticationService, usersProviders],
-  exports: [AuthenticationService, usersProviders],
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: JWT_SECRET_TOKEN,
+      signOptions: { expiresIn: JWT_EXPIRES_IN_TOKEN },
+    }),
+  ],
+  providers: [AuthenticationService, usersTokenProvider],
+  exports: [AuthenticationService, usersTokenProvider],
 })
-export class AuthenticationModule {}
+export class TokenModule {}

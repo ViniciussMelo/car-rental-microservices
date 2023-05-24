@@ -1,15 +1,15 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   PrimaryKey,
   AutoIncrement,
-  Unique,
 } from 'sequelize-typescript';
 
-@Table({ tableName: 'users' })
-export class User extends Model<User> {
+import { BaseModel } from '@shared/model/base.model';
+
+@Table({ tableName: 'users', paranoid: true })
+export class User extends BaseModel<User> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
@@ -18,13 +18,9 @@ export class User extends Model<User> {
   @Column(DataType.STRING)
   name: string;
 
-  @Unique
   @Column(DataType.STRING)
   email: string;
 
   @Column(DataType.STRING)
   password: string;
-
-  @Column(DataType.BOOLEAN)
-  isActive: boolean;
 }

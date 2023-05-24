@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
 
 import { IDatabaseConfigAttributes } from '@configs/interfaces/sequelize.interface';
-import { UserToken } from '@modules/authentication/models/user-token.model';
+import { UserToken } from '@modules/user/models/user-token.model';
 import { databaseConfig } from '@configs/database/sequelize.config';
-import { User } from '@modules/authentication/models/user.model';
-import { SEQUELIZE } from '@constants/index';
+import { User } from '@modules/user/models/user.model';
+import { SEQUELIZE } from '@shared/constants/index';
 
 export const databaseProviders = [
   {

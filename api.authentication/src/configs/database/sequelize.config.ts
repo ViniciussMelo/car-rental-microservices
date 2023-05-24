@@ -12,6 +12,7 @@ export const databaseConfig: IDatabaseConfig = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    paranoid: true,
   },
   test: {
     username: process.env.DB_USER,
@@ -20,5 +21,6 @@ export const databaseConfig: IDatabaseConfig = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    paranoid: true,
   },
 };
