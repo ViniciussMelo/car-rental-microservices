@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
@@ -14,6 +15,12 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   const port = process.env.PORT || 3003;
 

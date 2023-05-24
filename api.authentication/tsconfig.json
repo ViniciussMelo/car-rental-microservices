@@ -22,6 +22,8 @@
       "@configs/*": ["configs/*"],
       "@shared/*": ["shared/*"],
       "@constants/*": ["constants/*"],
+      "@interceptors/*": ["interceptors/*"],
+      "@errors/*": ["errors/*"],
     }
   }
 }
