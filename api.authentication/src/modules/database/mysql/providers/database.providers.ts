@@ -3,10 +3,11 @@ import { Sequelize } from 'sequelize-typescript';
 import { IDatabaseConfigAttributes } from '@configs/interfaces/sequelize.interface';
 import { databaseConfig } from '@configs/database/sequelize.config';
 import { User } from '@modules/authentication/models/user.model';
+import { SEQUELIZE } from '@constants/index';
 
 export const databaseProviders = [
   {
-    provide: 'SEQUELIZE',
+    provide: SEQUELIZE,
     useFactory: async () => {
       let config: IDatabaseConfigAttributes;
       switch (process.env.NODE_ENV) {

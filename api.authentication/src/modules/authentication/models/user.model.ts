@@ -5,6 +5,7 @@ import {
   DataType,
   PrimaryKey,
   AutoIncrement,
+  Unique,
 } from 'sequelize-typescript';
 
 @Table({ tableName: 'users' })
@@ -17,9 +18,13 @@ export class User extends Model<User> {
   @Column(DataType.STRING)
   name: string;
 
+  @Unique
   @Column(DataType.STRING)
   email: string;
 
   @Column(DataType.STRING)
   password: string;
+
+  @Column(DataType.BOOLEAN)
+  isActive: boolean;
 }

@@ -20,6 +20,8 @@
     "paths": {
       "@modules/*": ["modules/*"],
       "@configs/*": ["configs/*"],
+      "@shared/*": ["shared/*"],
+      "@constants/*": ["constants/*"],
     }
   }
 }
