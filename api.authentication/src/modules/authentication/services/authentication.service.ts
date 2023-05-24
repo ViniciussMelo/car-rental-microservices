@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  CACHE_MANAGER,
-  UnauthorizedException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Inject, Injectable, CACHE_MANAGER, HttpStatus } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 import { RegisterUserDto, LoginDto } from '@modules/authentication/dtos';

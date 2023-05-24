@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 
 import { IDatabaseConfigAttributes } from '@configs/interfaces/sequelize.interface';
+import { UserToken } from '@modules/authentication/models/user-token.model';
 import { databaseConfig } from '@configs/database/sequelize.config';
 import { User } from '@modules/authentication/models/user.model';
 import { SEQUELIZE } from '@constants/index';
@@ -21,7 +22,7 @@ export const databaseProviders = [
           config = databaseConfig.development;
       }
       const sequelize = new Sequelize(config as any);
-      sequelize.addModels([User]);
+      sequelize.addModels([User, UserToken]);
       await sequelize.sync();
       return sequelize;
     },
