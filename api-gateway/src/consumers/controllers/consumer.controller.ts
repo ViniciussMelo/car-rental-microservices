@@ -7,8 +7,17 @@ import { RedirectService } from '@redirects/services/redirect.service';
 export class ConsumerController {
   constructor(private readonly redirectService: RedirectService) {}
 
+  @All('*')
+  async allRoutes(@Req() request: Request) {
+    return this.redirect(request);
+  }
+
   @All()
   async proxyRequest(@Req() request: Request): Promise<any> {
+    return this.redirect(request);
+  }
+
+  private async redirect(@Req() request: Request) {
     const endpoint = request.path;
     const url = process.env.CONSUMER_URL + endpoint;
 

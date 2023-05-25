@@ -13,7 +13,10 @@ export class RedirectService {
         method: request.method,
         url,
         data: request.body,
-        headers: request.headers,
+        headers: {
+          ...request.headers,
+          'x-api-key': process.env.API_GATEWAY_KEY,
+        },
       }),
     );
 
