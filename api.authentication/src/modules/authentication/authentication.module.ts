@@ -6,6 +6,7 @@ import {
   JWT_SECRET_TOKEN,
   USER_TOKEN_REPOSITORY,
 } from '@shared/constants/index';
+import { AuthenticationController } from '@modules/authentication/controllers/authentication.controller';
 import { AuthenticationService } from '@modules/authentication/services/authentication.service';
 import { UserToken } from '@modules/user/models/user-token.model';
 
@@ -23,6 +24,7 @@ export const usersTokenProvider = {
       signOptions: { expiresIn: JWT_EXPIRES_IN_TOKEN },
     }),
   ],
+  controllers: [AuthenticationController],
   providers: [AuthenticationService, usersTokenProvider],
   exports: [AuthenticationService, usersTokenProvider],
 })

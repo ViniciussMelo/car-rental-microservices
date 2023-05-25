@@ -6,7 +6,7 @@ import { AuthUser } from '@shared/decorators/auth-user.decorator';
 import { RegisterUserDto, LoginDto } from '@modules/user/dtos';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 
-@Controller('authentication')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
