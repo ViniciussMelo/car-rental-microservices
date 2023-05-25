@@ -8,7 +8,6 @@ import { BcryptHash } from '@shared/utils/bcrypt-hash.shared';
 import { USER_REPOSITORY } from '@shared/constants/index';
 import { User } from '@modules/user/models/user.model';
 import { AppError } from '@shared/errors/app.error';
-import { CacheData } from '@shared/utils/cache-data.shared';
 
 @Injectable()
 export class UserService {
