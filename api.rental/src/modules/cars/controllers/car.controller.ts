@@ -6,4 +6,9 @@ export class CarController {
   async get() {
     return 'Hello!';
   }
+
+  @Get('/test')
+  async get2() {
+    return 'Hello2!';
+  }
 }

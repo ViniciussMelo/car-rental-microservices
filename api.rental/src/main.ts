@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 
 import { swaggerConfig } from '@configs/swagger/swagger.config';
 import { AppModule } from './app.module';
+import { ApiKeyGuard } from '@shared/guards/api-key.guard';
 
 async function bootstrap() {
   dotenv.config();
@@ -15,6 +16,10 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
+
+  app.useGlobalGuards(new ApiKeyGuard());
+
+  app.setGlobalPrefix(process.env.API_PREFIX);
 
   await swaggerConfig(app, []);
 
