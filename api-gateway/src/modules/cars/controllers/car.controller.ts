@@ -1,9 +1,11 @@
-import { All, Controller, Get, Req } from '@nestjs/common';
+import { All, Controller, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 
-import { RedirectService } from '@redirects/services/redirect.service';
+import { RedirectService } from '@modules/redirects/services/redirect.service';
+import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 
 @Controller('cars')
+@UseGuards(JwtAuthGuard)
 export class CarController {
   constructor(private readonly redirectService: RedirectService) {}
   @All('*')

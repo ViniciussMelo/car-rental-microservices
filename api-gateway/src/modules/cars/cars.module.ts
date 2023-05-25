@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { CarController } from '@cars/controllers/car.controller';
-import { RedirectsModule } from '@redirects/redirects.module';
+import { CarController } from '@modules/cars/controllers/car.controller';
+import { RedirectsModule } from '@modules/redirects/redirects.module';
 
 @Module({
   imports: [RedirectsModule],

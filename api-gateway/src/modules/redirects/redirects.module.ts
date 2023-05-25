@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 
-import { RedirectService } from '@redirects/services/redirect.service';
+import { RedirectService } from '@modules/redirects/services/redirect.service';
 
 @Module({
   imports: [HttpModule],

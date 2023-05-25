@@ -1,12 +1,10 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
-import { ConsumersModule } from '@consumers/consumers.module';
-import { RedirectsModule } from '@redirects/redirects.module';
-import { HealthModule } from '@health/health.module';
-import { CarsModule } from '@cars/cars.module';
+import { ModulesModule } from '@modules/modules.module';
 
 @Module({
-  imports: [RedirectsModule, CarsModule, ConsumersModule, HealthModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ModulesModule],
   controllers: [],
   providers: [],
 })
