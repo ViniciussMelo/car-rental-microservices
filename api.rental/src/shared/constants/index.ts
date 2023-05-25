@@ -1,1 +1,3 @@
 export const API_KEY_PROVIDER = 'API_KEY_PROVIDER';
+
+export const CAR_REPOSITORY = 'CAR_REPOSITORY';

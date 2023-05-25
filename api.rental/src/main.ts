@@ -1,9 +1,11 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
 import { swaggerConfig } from '@configs/swagger/swagger.config';
-import { AppModule } from './app.module';
 import { ApiKeyGuard } from '@shared/guards/api-key.guard';
+import { AppModule } from './app.module';
+import { ErrorInterceptor } from '@shared/interceptors/error.interceptor';
 
 async function bootstrap() {
   dotenv.config();
@@ -17,6 +19,13 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
+  app.useGlobalInterceptors(new ErrorInterceptor());
   app.useGlobalGuards(new ApiKeyGuard());
 
   app.setGlobalPrefix(process.env.API_PREFIX);
