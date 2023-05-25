@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { Request } from 'express';
@@ -8,18 +8,28 @@ export class RedirectService {
   constructor(private readonly httpService: HttpService) {}
 
   async redirect(request: Request, url: string) {
-    const response = await firstValueFrom(
-      this.httpService.request({
-        method: request.method,
-        url,
-        data: request.body,
-        headers: {
-          ...request.headers,
-          'x-api-key': process.env.API_GATEWAY_KEY,
-        },
-      }),
-    );
+    try {
+      const bodyContentLength = Buffer.byteLength(JSON.stringify(request.body));
 
-    return response.data;
+      const response = await firstValueFrom(
+        this.httpService.request({
+          method: request.method,
+          url,
+          data: request.body,
+          headers: {
+            ...request.headers,
+            'Content-Length': bodyContentLength,
+            'x-api-key': process.env.API_GATEWAY_KEY,
+          },
+        }),
+      );
+
+      return response.data;
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
+
+      throw new HttpException(JSON.parse(message), status);
+    }
   }
 }
