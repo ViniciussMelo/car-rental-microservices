@@ -28,4 +28,4 @@ export const usersTokenProvider = {
   providers: [AuthenticationService, usersTokenProvider],
   exports: [AuthenticationService, usersTokenProvider],
 })
-export class TokenModule {}
+export class AuthenticationModule {}

@@ -23,7 +23,7 @@
     "@nestjs/common": "8.4.3",
     "@nestjs/config": "2.3.2",
     "@nestjs/core": "8.4.3",
-    "@nestjs/jwt": "^10.0.3",
+    "@nestjs/jwt": "10.0.3",
     "@nestjs/passport": "9.0.3",
     "@nestjs/platform-express": "8.4.3",
     "@nestjs/sequelize": "9.0.2",
@@ -37,7 +37,8 @@
     "passport-jwt": "4.0.1",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.2.0",
-    "sequelize-typescript": "2.1.5"
+    "sequelize-typescript": "2.1.5",
+    "swagger-ui-express": "4.6.3"
   },
   "devDependencies": {
     "@nestjs/cli": "8.2.4",

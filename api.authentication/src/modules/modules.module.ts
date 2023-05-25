@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 
 import { SequelizeConfigModule } from '@modules/database/sequelize-config-module.module';
-import { TokenModule } from '@modules/authentication/authentication.module';
+import { AuthenticationModule } from '@modules/authentication/authentication.module';
 import { HealthModule } from '@modules/health/health.module';
 import { UserModule } from '@modules/user/user.module';
 
@@ -9,7 +9,7 @@ import { UserModule } from '@modules/user/user.module';
   imports: [
     CacheModule.register({ isGlobal: true }),
     SequelizeConfigModule,
-    TokenModule,
+    AuthenticationModule,
     UserModule,
     HealthModule,
   ],

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { TokenModule } from '@modules/authentication/authentication.module';
+import { AuthenticationModule } from '@modules/authentication/authentication.module';
 import { UserController } from '@modules/user/controllers/user.controller';
 import { UserService } from '@modules/user/services/user.service';
 import { USER_REPOSITORY } from '@shared/constants/index';
@@ -12,7 +12,7 @@ export const usersProvider = {
 };
 
 @Module({
-  imports: [TokenModule],
+  imports: [AuthenticationModule],
   controllers: [UserController],
   providers: [UserService, usersProvider],
   exports: [UserService, usersProvider],
