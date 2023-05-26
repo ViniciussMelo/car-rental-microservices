@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCarDto {
@@ -29,4 +29,11 @@ export class CreateCarDto {
     example: 'Car brand',
   })
   brand: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 10.0,
+  })
+  dailyRate: number;
 }

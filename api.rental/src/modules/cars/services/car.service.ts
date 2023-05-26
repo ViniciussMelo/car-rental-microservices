@@ -23,6 +23,7 @@ export class CarService extends BasePaginationService<Car> {
     description,
     licensePlate,
     name,
+    dailyRate,
   }: CreateCarDto): Promise<Car> {
     const carWithSameLicensePlate = await this.carsRepository.findOne({
       where: {
@@ -42,6 +43,7 @@ export class CarService extends BasePaginationService<Car> {
       description,
       licensePlate,
       name,
+      dailyRate,
     });
   }
 

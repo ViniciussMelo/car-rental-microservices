@@ -36,4 +36,10 @@ export class Car extends BaseModel<Car> {
 
   @Column(DataType.STRING)
   brand: string;
+
+  @Column({
+    type: DataType.DOUBLE,
+    field: 'daily_rate',
+  })
+  dailyRate: number;
 }

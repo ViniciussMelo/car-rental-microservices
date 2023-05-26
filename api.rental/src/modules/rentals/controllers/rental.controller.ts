@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, Post } from '@nestjs/common';
+import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { RentalService } from '@modules/rentals/services/rental.service';
@@ -13,5 +13,10 @@ export class RentalController {
   @Post()
   rentCar(@Headers() headers: HeaderDto, @Body() rentalDto: RentalDto) {
     return this.rentalService.rentCar(headers.user, rentalDto);
+  }
+
+  @Post('/:rentalId')
+  devolution(@Param('rentalId') rentalId: number) {
+    return this.rentalService.devolution(rentalId);
   }
 }

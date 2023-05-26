@@ -1,3 +1,4 @@
+import { DateFormat } from '@shared/utils/date-format.shared';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { CAR_REPOSITORY, RENTAL_REPOSITORY } from '@shared/constants';
@@ -54,9 +55,53 @@ export class RentalService {
       startDate: new Date(),
     });
 
-    await this.carsRepository.update(
+    await this.updateAvailable(carId, false);
+  }
+
+  async devolution(rentalId: number) {
+    const foundRental = await this.rentalRepository.findOne({
+      where: {
+        id: rentalId,
+        endDate: null,
+      },
+    });
+
+    if (!foundRental) {
+      throw new AppError(HttpStatus.NOT_FOUND, 'Rental not found');
+    }
+
+    const car = await this.carsRepository.findOne({
+      where: {
+        id: foundRental.carId,
+      },
+    });
+
+    const dateNow = new Date();
+    const elapsedDays = DateFormat.compareInDays(
+      foundRental.startDate,
+      dateNow,
+    );
+    const total = car.dailyRate * elapsedDays;
+
+    await this.rentalRepository.update(
       {
-        isAvailable: false,
+        total,
+        endDate: dateNow,
+      },
+      {
+        where: {
+          id: rentalId,
+        },
+      },
+    );
+
+    await this.updateAvailable(car.id, true);
+  }
+
+  private async updateAvailable(carId: number, isAvailable: boolean) {
+    return this.carsRepository.update(
+      {
+        isAvailable,
       },
       {
         where: {
