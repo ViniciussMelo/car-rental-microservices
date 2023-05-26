@@ -1,8 +1,9 @@
-import { DateFormat } from '@shared/utils/date-format.shared';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { CAR_REPOSITORY, RENTAL_REPOSITORY } from '@shared/constants';
+import { KafkaService } from '@modules/message/services/kafka.service';
 import { IAuthUser } from '@shared/interfaces/auth-user.interface';
+import { DateFormat } from '@shared/utils/date-format.shared';
 import { Rental } from '@modules/rentals/models/rental.model';
 import { RentalDto } from '@modules/rentals/dtos/rental.dto';
 import { Car } from '@modules/cars/models/car.model';
@@ -16,6 +17,8 @@ export class RentalService {
 
     @Inject(CAR_REPOSITORY)
     private readonly carsRepository: typeof Car,
+
+    private readonly kafkaService: KafkaService,
   ) {}
 
   async rentCar(user: IAuthUser, { carId }: RentalDto) {
@@ -56,6 +59,11 @@ export class RentalService {
     });
 
     await this.updateAvailable(carId, false);
+
+    this.kafkaService.emit(process.env.KAFKA_CAR_RENTED_TOPIC, {
+      car: foundCar,
+      user,
+    });
   }
 
   async devolution(rentalId: number) {
