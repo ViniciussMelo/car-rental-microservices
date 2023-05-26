@@ -13,9 +13,8 @@ export class RedirectService {
 
       const response = await firstValueFrom(
         this.httpService.request({
-          method: request.method,
+          ...request,
           url,
-          data: request.body,
           headers: {
             ...request.headers,
             'Content-Length': bodyContentLength,
@@ -29,7 +28,12 @@ export class RedirectService {
       const message = error.response?.data?.message || error.message;
       const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
 
-      throw new HttpException(JSON.parse(message), status);
+      let parsedMsg = message;
+      try {
+        parsedMsg = JSON.parse(message);
+      } catch (err) {}
+
+      throw new HttpException(parsedMsg, status);
     }
   }
 }

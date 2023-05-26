@@ -3,6 +3,7 @@ import { Request } from 'express';
 
 import { RedirectService } from '@modules/redirects/services/redirect.service';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
+import { UrlUtils } from '@shared/utils/url-utils';
 
 @Controller('cars')
 @UseGuards(JwtAuthGuard)
@@ -19,8 +20,10 @@ export class CarController {
   }
 
   private async redirect(@Req() request: Request) {
-    const endpoint = request.path;
-    const url = process.env.CARS_URL + endpoint;
+    const path = request.path;
+    const endpoint = process.env.CARS_URL + path;
+
+    const url = UrlUtils.getUrlQueryParams(endpoint, request);
 
     return this.redirectService.redirect(request, url);
   }
