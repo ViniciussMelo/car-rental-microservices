@@ -2,7 +2,7 @@ import {
   CallHandler,
   ExecutionContext,
   HttpException,
-  InternalServerErrorException,
+  HttpStatus,
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, catchError, throwError } from 'rxjs';
@@ -46,7 +46,11 @@ export class ErrorInterceptor implements NestInterceptor {
         console.error(`[${date}] - [Internal Server Error]: ${error.message}`);
 
         return throwError(
-          () => new InternalServerErrorException('Internal server error'),
+          () =>
+            new HttpException(
+              'Internal Server Error',
+              HttpStatus.INTERNAL_SERVER_ERROR,
+            ),
         );
       }),
     );
