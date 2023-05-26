@@ -24,8 +24,9 @@ export class Car extends BaseModel<Car> {
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: true,
+    field: 'is_available',
   })
-  available: boolean;
+  isAvailable: boolean;
 
   @Column({
     type: DataType.STRING,

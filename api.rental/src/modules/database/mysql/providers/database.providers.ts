@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 
 import { IDatabaseConfigAttributes } from '@configs/interfaces/sequelize.interface';
 import { databaseConfig } from '@configs/database/sequelize.config';
+import { Rental } from '@modules/rentals/models/rental.model';
 import { Car } from '@modules/cars/models/car.model';
 
 export const databaseProviders = [
@@ -20,7 +21,7 @@ export const databaseProviders = [
           config = databaseConfig.development;
       }
       const sequelize = new Sequelize(config as any);
-      sequelize.addModels([Car]);
+      sequelize.addModels([Car, Rental]);
       await sequelize.sync();
       return sequelize;
     },

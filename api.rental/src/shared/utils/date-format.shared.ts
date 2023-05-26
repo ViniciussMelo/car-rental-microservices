@@ -17,7 +17,7 @@ export class DateFormat {
     return newDate;
   }
 
-  static isExpired(date: Date, date2 = new Date()): boolean {
+  static isGreaterThan(date: Date, date2 = new Date()): boolean {
     return date < date2;
   }
 }
