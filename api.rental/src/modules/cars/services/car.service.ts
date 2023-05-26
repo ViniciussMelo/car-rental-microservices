@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { WhereOptions } from 'sequelize';
 
 import { IPaginationResponse } from '@shared/interfaces/pagination-response.interface';
 import { BasePaginationService } from '@shared/services/base-pagination.service';
@@ -46,12 +47,14 @@ export class CarService extends BasePaginationService<Car> {
 
   async getAll(
     paginationDto: PaginationDto,
+    where: WhereOptions<Car> = {},
   ): Promise<IPaginationResponse<Car>> {
     const { orderBy, orderDirection, pageNumber, pageSize } =
       PaginationDto.factory(paginationDto);
 
     const totalPromise = this.carsRepository.count();
     const dataPromise = this.carsRepository.findAll({
+      where,
       order: [[orderBy, orderDirection]],
       offset: (pageNumber - 1) * pageSize,
       limit: pageSize,

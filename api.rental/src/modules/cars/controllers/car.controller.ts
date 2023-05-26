@@ -21,4 +21,9 @@ export class CarController {
   get(@Query() queryParams: PaginationDto): Promise<IPaginationResponse<Car>> {
     return this.carService.getAll(queryParams);
   }
+
+  @Get('/available')
+  getAvailableCars(@Query() queryParams: PaginationDto) {
+    return this.carService.getAll(queryParams, { available: true });
+  }
 }

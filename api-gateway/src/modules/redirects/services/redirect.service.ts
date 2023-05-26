@@ -13,8 +13,9 @@ export class RedirectService {
 
       const response = await firstValueFrom(
         this.httpService.request({
-          ...request,
+          method: request.method,
           url,
+          data: request.body,
           headers: {
             ...request.headers,
             'Content-Length': bodyContentLength,
