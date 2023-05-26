@@ -5,7 +5,7 @@ import { RedirectService } from '@modules/redirects/services/redirect.service';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 import { UrlUtils } from '@shared/utils/url-utils';
 
-@Controller('cars')
+@Controller(process.env.RENTAL_API_PREFIX)
 @UseGuards(JwtAuthGuard)
 export class CarController {
   constructor(private readonly redirectService: RedirectService) {}
@@ -20,10 +20,11 @@ export class CarController {
   }
 
   private async redirect(@Req() request: Request) {
-    const path = request.path;
-    const endpoint = process.env.CARS_URL + path;
-
-    const url = UrlUtils.getUrlQueryParams(endpoint, request);
+    const url = UrlUtils.getUrl(
+      request,
+      process.env.CARS_URL,
+      process.env.RENTAL_API_PREFIX,
+    );
 
     return this.redirectService.redirect(request, url);
   }

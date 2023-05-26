@@ -1,6 +1,15 @@
 import { Request } from 'express';
 
 export class UrlUtils {
+  static getUrl(request: Request, apiUrl: string, apiPrefix: string): string {
+    const path = this.getPath(request, apiPrefix);
+    const endpoint = apiUrl + path;
+
+    const url = UrlUtils.getUrlQueryParams(endpoint, request);
+
+    return url;
+  }
+
   static getUrlQueryParams(originalUrl: string, request: Request): string {
     const queryParams = request.query;
 
@@ -22,5 +31,11 @@ export class UrlUtils {
     url.search = searchParams.toString();
 
     return url.toString();
+  }
+
+  static getPath(request: Request, apiPrefix: string) {
+    const [, path] = request.path.split('/' + apiPrefix);
+
+    return path;
   }
 }

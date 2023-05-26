@@ -21,10 +21,11 @@ export class ConsumerController {
   }
 
   private async redirect(@Req() request: Request) {
-    const path = request.path;
-    const endpoint = process.env.CONSUMER_URL + path;
-
-    const url = UrlUtils.getUrlQueryParams(endpoint, request);
+    const url = UrlUtils.getUrl(
+      request,
+      process.env.CONSUMER_URL,
+      process.env.CONSUMER_API_PREFIX,
+    );
 
     return this.redirectService.redirect(request, url);
   }

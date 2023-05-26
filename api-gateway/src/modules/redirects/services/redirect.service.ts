@@ -10,6 +10,7 @@ export class RedirectService {
   async redirect(request: Request, url: string) {
     try {
       const bodyContentLength = Buffer.byteLength(JSON.stringify(request.body));
+      const user = JSON.stringify(request['user']);
 
       const response = await firstValueFrom(
         this.httpService.request({
@@ -20,6 +21,7 @@ export class RedirectService {
             ...request.headers,
             'Content-Length': bodyContentLength,
             'x-api-key': process.env.API_GATEWAY_KEY,
+            user,
           },
         }),
       );
