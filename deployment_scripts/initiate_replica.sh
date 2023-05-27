@@ -2,7 +2,7 @@
 
 sleep 2
 
-until mongo --host mongo --eval "print(\"waited for connection\")"
+until mongosh --host mongo --eval "print(\"waited for connection\")"
 do
     sleep 2
 done
