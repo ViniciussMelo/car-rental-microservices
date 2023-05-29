@@ -1,3 +1,4 @@
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
@@ -18,6 +19,26 @@ async function bootstrap() {
   app.setGlobalPrefix(process.env.API_PREFIX);
 
   const port = process.env.PORT || 3002;
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: process.env.KAFKA_CLIENT_ID,
+        brokers: [process.env.KAFKA_BROKERS],
+      },
+      consumer: {
+        groupId:
+          process.env.NODE_ENV === 'DEVELOPMENT'
+            ? process.env.KAFKA_GROUP_ID + new Date().getMilliseconds()
+            : process.env.KAFKA_GROUP_ID,
+      },
+    },
+  });
+
+  await app.startAllMicroservices().then(() => {
+    console.log('[Consumer] Microservice running!');
+  });
 
   await app
     .listen(port)

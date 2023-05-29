@@ -12,8 +12,9 @@ datasource db {
 
 type Rental {
   carId        Int
+  licensePlate String
   startDate    DateTime
-  returnedDate DateTime
+  returnedDate DateTime?
   total        Float
 }
 
