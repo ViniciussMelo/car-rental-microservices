@@ -52,17 +52,21 @@ export class RentalService {
       );
     }
 
-    await this.rentalRepository.create({
+    const startDate = new Date();
+    const rent = {
       userId,
       carId,
-      startDate: new Date(),
-    });
+      startDate,
+    };
+
+    await this.rentalRepository.create(rent);
 
     await this.updateAvailable(carId, false);
 
     this.kafkaService.emit(process.env.KAFKA_CAR_RENTED_TOPIC, {
       car: foundCar,
       user,
+      rent,
     });
   }
 
