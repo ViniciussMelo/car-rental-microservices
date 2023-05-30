@@ -1,8 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 import { CarService } from '@modules/cars/services/car.service';
 
+@ApiSecurity('x-api-key')
 @Controller('car')
 @ApiTags('car')
 export class CarController {

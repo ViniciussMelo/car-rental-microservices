@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
 import { swaggerConfig } from '@configs/swagger/swagger.config';
+import { ApiKeyGuard } from '@shared/guards/api-key.guard';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -23,6 +24,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalGuards(new ApiKeyGuard());
 
   app.setGlobalPrefix(process.env.API_PREFIX);
 

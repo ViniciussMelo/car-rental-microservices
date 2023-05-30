@@ -22,6 +22,6 @@ export class CarService {
       throw new NotFoundException();
     }
 
-    return GetByCarIdDto.factory(users);
+    return GetByCarIdDto.factory(users, carId);
   }
 }

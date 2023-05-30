@@ -1,9 +1,10 @@
 import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 import { GetUserByIdDto } from '@modules/users/dtos/get-user-by-id.dto';
 import { UserService } from '@modules/users/services/user.service';
 
+@ApiSecurity('x-api-key')
 @Controller('user')
 @ApiTags('user')
 export class UserController {

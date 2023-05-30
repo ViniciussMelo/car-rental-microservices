@@ -1,9 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { User } from '@prisma/client';
+import { Rental, User } from '@prisma/client';
 
 import { GetUserDto } from '@modules/users/dtos/get-user.dto';
 
+class GetUserDtoByCarId extends GetUserDto {
+  @ApiProperty({
+    example: 1,
+  })
+  @Expose()
+  rentedTimes: number;
+
+  @ApiProperty({
+    example: 100,
+  })
+  @Expose()
+  amount: number;
+}
 export class GetByCarIdDto {
   @ApiProperty({
     example: 1,
@@ -18,23 +31,33 @@ export class GetByCarIdDto {
   licensePlate: string;
 
   @ApiProperty({
-    type: [GetUserDto],
+    type: [GetUserDtoByCarId],
   })
   @Expose()
-  users: GetUserDto[];
+  users: GetUserDtoByCarId[];
 
-  static factory(data: User[]): GetByCarIdDto {
-    const users = data.map(({ id, name, email }) => {
-      return {
-        id,
-        name,
-        email,
-      };
-    });
+  static factory(data: User[], carId: number): GetByCarIdDto {
+    const users: GetUserDtoByCarId[] = data.map(
+      ({ id, name, email, rentals }) => {
+        const userRentals = rentals.filter((rental) => rental.carId === carId);
+
+        return {
+          id,
+          name,
+          email,
+          amount: userRentals
+            .map((rental) => rental.total)
+            .reduce((prev, next) => prev + next),
+          rentedTimes: userRentals.length,
+        };
+      },
+    );
+
+    const carRental = data[0].rentals.find((rental) => rental.carId === carId);
 
     return {
-      carId: data[0].rentals[0].carId,
-      licensePlate: data[0].rentals[0].licensePlate,
+      carId: carRental.carId,
+      licensePlate: carRental.licensePlate,
       users,
     };
   }
