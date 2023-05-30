@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
+import { swaggerConfig } from '@configs/swagger/swagger.config';
 import { AppModule } from './app.module';
 
 dotenv.config();
@@ -14,6 +15,8 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
+
+  await swaggerConfig(app, []);
 
   const port = process.env.PORT || 3000;
 

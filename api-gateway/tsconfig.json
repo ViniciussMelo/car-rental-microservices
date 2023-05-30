@@ -20,6 +20,7 @@
     "paths": {
       "@modules/*": ["modules/*"],
       "@shared/*": ["shared/*"],
+      "@configs/*": ["configs/*"],
     }
   }
 }
