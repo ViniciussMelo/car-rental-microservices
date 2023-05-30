@@ -16,7 +16,10 @@ export class RentalController {
   }
 
   @Post('/:rentalId')
-  devolution(@Param('rentalId') rentalId: number) {
-    return this.rentalService.devolution(rentalId);
+  devolution(
+    @Headers() headers: HeaderDto,
+    @Param('rentalId') rentalId: number,
+  ) {
+    return this.rentalService.devolution(headers.user, rentalId);
   }
 }

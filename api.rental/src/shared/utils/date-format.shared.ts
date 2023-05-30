@@ -38,4 +38,10 @@ export class DateFormat {
 
     return Math.floor((utc2 - utc1) / _MS_PER_DAY) + 1;
   }
+
+  static getDateWithoutMS(date: Date = new Date()) {
+    date.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), 0);
+
+    return date;
+  }
 }

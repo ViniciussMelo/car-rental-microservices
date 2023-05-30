@@ -52,25 +52,25 @@ export class RentalService {
       );
     }
 
-    const startDate = new Date();
-    const rent = {
+    const rental = await this.rentalRepository.create({
       userId,
       carId,
-      startDate,
-    };
-
-    await this.rentalRepository.create(rent);
+      startDate: DateFormat.getDateWithoutMS(),
+    });
 
     await this.updateAvailable(carId, false);
 
     this.kafkaService.emit(process.env.KAFKA_CAR_RENTED_TOPIC, {
-      car: foundCar,
-      user,
-      rent,
+      key: this.getKafkaKey(user.sub),
+      value: {
+        car: foundCar,
+        user,
+        rent: rental,
+      },
     });
   }
 
-  async devolution(rentalId: number) {
+  async devolution(user: IAuthUser, rentalId: number) {
     const foundRental = await this.rentalRepository.findOne({
       where: {
         id: rentalId,
@@ -88,11 +88,13 @@ export class RentalService {
       },
     });
 
-    const dateNow = new Date();
+    const dateNow = DateFormat.getDateWithoutMS();
+
     const elapsedDays = DateFormat.compareInDays(
       foundRental.startDate,
       dateNow,
     );
+
     const total = car.dailyRate * elapsedDays;
 
     await this.rentalRepository.update(
@@ -108,6 +110,15 @@ export class RentalService {
     );
 
     await this.updateAvailable(car.id, true);
+
+    this.kafkaService.emit(process.env.KAFKA_CAR_DEVOLUTION_TOPIC, {
+      key: this.getKafkaKey(user.sub),
+      value: {
+        car,
+        user,
+        rent: Object.assign(foundRental, { endDate: dateNow, total }),
+      },
+    });
   }
 
   private async updateAvailable(carId: number, isAvailable: boolean) {
@@ -121,5 +132,9 @@ export class RentalService {
         },
       },
     );
+  }
+
+  private getKafkaKey(userId: number): string {
+    return `user-${userId}`;
   }
 }
