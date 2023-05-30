@@ -1,7 +1,9 @@
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
+import { swaggerConfig } from '@configs/swagger/swagger.config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -16,7 +18,15 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
   app.setGlobalPrefix(process.env.API_PREFIX);
+
+  await swaggerConfig(app, []);
 
   const port = process.env.PORT || 3002;
 

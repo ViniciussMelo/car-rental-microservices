@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 import { ICreateUser } from '@modules/users/interfaces/create-user.interface';
 import { DatabaseService } from '@modules/database/services/database.service';
-import { User } from '@prisma/client';
+import { GetUserByIdDto } from '@modules/users/dtos/get-user-by-id.dto';
 
 @Injectable()
 export class UserService {
@@ -17,5 +18,19 @@ export class UserService {
         rentals: [],
       },
     });
+  }
+
+  async getByUserId(userId: number): Promise<GetUserByIdDto> {
+    const user = await this.databaseService.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return GetUserByIdDto.factory(user);
   }
 }
