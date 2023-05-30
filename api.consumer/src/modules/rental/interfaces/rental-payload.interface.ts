@@ -1,6 +1,6 @@
 import { ICreateUser } from '@modules/users/interfaces/create-user.interface';
 
-export interface IRentalCreatedPayload {
+export interface IRentalPayload {
   car: {
     deletedAt: string;
     id: number;
@@ -18,5 +18,7 @@ export interface IRentalCreatedPayload {
     userId: number;
     carId: number;
     startDate: Date;
+    endDate?: Date;
+    total?: number;
   };
 }
