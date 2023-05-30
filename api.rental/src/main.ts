@@ -2,8 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
-import { ErrorInterceptor } from '@shared/interceptors/error.interceptor';
 import { HeadersInterceptor } from '@shared/interceptors/headers.interceptor';
+import { ErrorInterceptor } from '@shared/interceptors/error.interceptor';
 import { swaggerConfig } from '@configs/swagger/swagger.config';
 import { ApiKeyGuard } from '@shared/guards/api-key.guard';
 import { AppModule } from './app.module';

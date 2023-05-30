@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { WhereOptions } from 'sequelize';
 
 import { IPaginationResponse } from '@shared/interfaces/pagination-response.interface';
+import { CreateCarResponseDto } from '@modules/cars/dtos/create-car-response.dto';
 import { BasePaginationService } from '@shared/services/base-pagination.service';
 import { CreateCarDto } from '@modules/cars/dtos/create-car.dto';
 import { PaginationDto } from '@shared/dtos/pagination.dto';
@@ -24,7 +25,7 @@ export class CarService extends BasePaginationService<Car> {
     licensePlate,
     name,
     dailyRate,
-  }: CreateCarDto): Promise<Car> {
+  }: CreateCarDto): Promise<CreateCarResponseDto> {
     const carWithSameLicensePlate = await this.carsRepository.findOne({
       where: {
         licensePlate,
@@ -50,7 +51,7 @@ export class CarService extends BasePaginationService<Car> {
   async getAll(
     paginationDto: PaginationDto,
     where: WhereOptions<Car> = {},
-  ): Promise<IPaginationResponse<Car>> {
+  ): Promise<IPaginationResponse<CreateCarResponseDto>> {
     const { orderBy, orderDirection, pageNumber, pageSize } =
       PaginationDto.factory(paginationDto);
 
