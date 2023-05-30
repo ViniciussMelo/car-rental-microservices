@@ -36,3 +36,6 @@
 > 	docker-compose up
 > ```
 > The next steps to run the microservices are inside their respective folders.
+
+## Architecture
+![Architecture Chart](https://github.com/ViniciussMelo/car-rental-microservices/assets/25934151/49c79934-5aa9-4b10-b353-f63c7e6d3cc0)
