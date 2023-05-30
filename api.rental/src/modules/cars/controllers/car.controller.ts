@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 import { IPaginationResponse } from '@shared/interfaces/pagination-response.interface';
 import { CreateCarDto } from '@modules/cars/dtos/create-car.dto';
@@ -7,6 +7,7 @@ import { CarService } from '@modules/cars/services/car.service';
 import { PaginationDto } from '@shared/dtos/pagination.dto';
 import { Car } from '@modules/cars/models/car.model';
 
+@ApiSecurity('x-api-key')
 @Controller('cars')
 @ApiTags('cars')
 export class CarController {

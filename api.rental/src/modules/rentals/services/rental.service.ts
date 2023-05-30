@@ -1,5 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
+import { IRentCarResponse } from '@modules/rentals/interfaces/rent-car-response.interface';
 import { CAR_REPOSITORY, RENTAL_REPOSITORY } from '@shared/constants';
 import { KafkaService } from '@modules/message/services/kafka.service';
 import { IAuthUser } from '@shared/interfaces/auth-user.interface';
@@ -21,7 +22,10 @@ export class RentalService {
     private readonly kafkaService: KafkaService,
   ) {}
 
-  async rentCar(user: IAuthUser, { carId }: RentalDto) {
+  async rentCar(
+    user: IAuthUser,
+    { carId }: RentalDto,
+  ): Promise<IRentCarResponse> {
     const userId = user.sub;
 
     const foundCar = await this.carsRepository.findOne({
@@ -68,6 +72,8 @@ export class RentalService {
         rent: rental,
       },
     });
+
+    return { rentalId: rental.id };
   }
 
   async devolution(user: IAuthUser, rentalId: number) {
