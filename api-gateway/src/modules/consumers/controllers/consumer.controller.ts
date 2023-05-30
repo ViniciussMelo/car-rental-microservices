@@ -5,7 +5,7 @@ import { RedirectService } from '@modules/redirects/services/redirect.service';
 import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
 import { UrlUtils } from '@shared/utils/url-utils';
 
-@Controller('consumer')
+@Controller(process.env.CONSUMER_API_PREFIX)
 @UseGuards(JwtAuthGuard)
 export class ConsumerController {
   constructor(private readonly redirectService: RedirectService) {}
